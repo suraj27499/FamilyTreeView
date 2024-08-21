@@ -1,0 +1,51 @@
+.family-node {
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  margin-left: 20px; /* Indentation for child nodes */
+  padding-left: 20px; /* Space for vertical lines */
+}
+
+.node-name {
+  font-weight: bold;
+  position: relative;
+  padding-bottom: 10px; /* Space for horizontal lines */
+}
+
+/* Horizontal line connecting the node to its children */
+.family-node::before {
+  content: '';
+  position: absolute;
+  left: -20px; /* Align with vertical line */
+  top: 50%;
+  width: 20px; /* Adjust to match indentation */
+  border-top: 2px solid #000; /* Line color and thickness */
+}
+
+/* Vertical line connecting parent node to children nodes */
+.family-node > .children::before {
+  content: '';
+  position: absolute;
+  left: -20px; /* Align with the horizontal line */
+  top: 0;
+  width: 2px; /* Line thickness */
+  height: 100%; /* Full height of the node */
+  border-left: 2px solid #000; /* Line color and thickness */
+}
+
+/* Layout for parents on the same level */
+.parents-wrapper {
+  display: flex;
+  flex-direction: row; /* Arrange parents horizontally */
+  align-items: flex-start; /* Align parents at the top */
+}
+
+/* Each parent */
+.parent {
+  margin-right: 20px; /* Space between parents */
+}
+
+/* Ensure proper spacing between sibling nodes */
+.children {
+  margin-top: 20px; /* Space between parent and child nodes */
+}
