@@ -5,8 +5,7 @@ import { OpenAI } from 'openai';
   providedIn: 'root',
 })
 export class AppService {
-  readonly apiKey =
-    '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';
+  readonly apiKey = '';
 
   searchPrompt(
     textInput: string
@@ -21,68 +20,27 @@ export class AppService {
         messages: [
           {
             role: 'user',
-            content: `You possess expertise in taking family hierarchy details and transforming them into a nested JSON structure.
-            Hierarchy should be oldest to youngest and json data should be like below.
-  
-          e.g. 
-          {
-            "name": "Paul",
-            "relationship": "grandfather",
-            "children": [
-              {
-                "name": "sital",
-                "relationship": "grandmother",
-                "children": []
-              },
-              {
-                "name": "Joseph",
-                "relationship": "father",
-                "children": [
-                  {
-                    "name": "surya",
-                    "relationship": "son",
-                    "children": [
-                      {
-                        "name": "riya",
-                        "relationship": "sibling",
-                        "children": []
-                      },
-                      {
-                        "name": "Brother",
-                        "relationship": "sibling",
-                        "children": []
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Mother",
-                    "relationship": "mother",
-                    "children": [
-                      {
-                        "name": "Maternal Grandfather",
-                        "relationship": "grandfather",
-                        "children": []
-                      },
-                      {
-                        "name": "Maternal Grandmother",
-                        "relationship": "grandmother",
-                        "children": []
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
+            content: `You possess expertise in taking family hierarchy details and transforming them into an array structure.
              
+            user input e.g.
+            i am Manmeet, my father name is Roop chand, he has 3 brothers named Samrat Singh ,Dhyan Chand, Sushil Singh, my grandfathers name is Ram singh
 
-          Provide the JSON data only, without any extra text or lines.
+            expexted output e.g.
+            [
+              { "key": 0, "name": "Ram singh", "gender": "M", "birthYear": "", "relationship": "grandfather" },
+              { "key": 1, "parent": 0, "name": "Roop chand", "gender": "M", "birthYear": "", "relationship": "father" },
+              { "key": 2, "parent": 0, "name": "Samrat Singh", "gender": "M", "birthYear": "", "relationship": "uncle" },
+              { "key": 3, "parent": 0, "name": "Dhyan Chand", "gender": "M", "birthYear": "", "relationship": "uncle" },
+              { "key": 4, "parent": 0, "name": "Sushil Singh", "gender": "M", "birthYear": "", "relationship": "uncle" },
+              { "key": 5, "parent": 1, "name": "Manmeet", "gender": "M", "birthYear": "", "relationship": "son" }
+            ]
+          Provide the array data only, without any extra text or lines.
 
           The User Input is: ${textInput}
-          `
+          `,
           },
         ],
-        model: 'gpt-4',
+        model: 'gpt-3.5-turbo',
       })
       .then((response) => {
         const output = response.choices[0].message.content;

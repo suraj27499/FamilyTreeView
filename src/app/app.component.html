@@ -1,17 +1,33 @@
 <div class="m-3">
   <label for="promptInputBox" class="form-label">Enter Prompt</label>
-  <textarea class="form-control" id="promptInputBox" rows="3" [(ngModel)]="textInput"></textarea>
+  <textarea
+    class="form-control"
+    id="promptInputBox"
+    rows="3"
+    [(ngModel)]="textInput"
+    placeholder="Describe your family structure for the tree..."
+  ></textarea>
 </div>
 <div class="d-flex justify-content-center mt-3">
-  <button type="button" class="btn btn-outline-primary btn-lg" (click)="generateFamilyTree()">
-    Generate Tree
+  <button
+    type="button"
+    class="btn btn-outline-primary btn-lg"
+    (click)="generateFamilyTree()"
+  >
+    Generate Family Tree
   </button>
 </div>
 
-<div class="row">
-  <div class="col">
+<div class="row mt-4">
+  <div class="col d-flex justify-content-center">
     <div *ngIf="treeData">
-      <family-tree [data]="treeData"></family-tree>
+      <gojs-diagram
+        #myDiag
+        [initDiagram]="initDiagram"
+        [modelData]="diagramModelData"
+        [nodeDataArray]="treeData"
+        [divClassName]="diagramDivClassName"
+      ></gojs-diagram>
     </div>
   </div>
 </div>
