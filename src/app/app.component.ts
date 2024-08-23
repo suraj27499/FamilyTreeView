@@ -8,11 +8,12 @@ import { GojsAngularModule } from 'gojs-angular';
 import { DiagramComponent } from 'gojs-angular';
 
 import { AppService } from './app.service';
+import { LoaderComponent } from '../components/loader/loader.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, CommonModule, GojsAngularModule],
+  imports: [RouterOutlet, FormsModule, CommonModule, GojsAngularModule, LoaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -20,59 +21,10 @@ export class AppComponent {
   title = 'familyTreeView';
   textInput: string = '';
   treeData: any;
+  protected isLoading: boolean = false;
 
   @ViewChild(DiagramComponent, { static: false })
   diagramComponent!: DiagramComponent;
-
-  familyData = [
-    {
-      key: 0,
-      name: 'Ram singh',
-      gender: 'M',
-      birthYear: '1940',
-      relationship: 'grandfather',
-    },
-    {
-      key: 1,
-      parent: 0,
-      name: 'Roop chand',
-      gender: 'M',
-      birthYear: '1970',
-      relationship: 'father',
-    },
-    {
-      key: 2,
-      parent: 0,
-      name: 'Samrat Singh',
-      gender: 'M',
-      birthYear: '1972',
-      relationship: 'uncle',
-    },
-    {
-      key: 3,
-      parent: 0,
-      name: 'Dhyan Chand',
-      gender: 'M',
-      birthYear: '1975',
-      relationship: 'uncle',
-    },
-    {
-      key: 4,
-      parent: 0,
-      name: 'Sushil Singh',
-      gender: 'M',
-      birthYear: '1978',
-      relationship: 'uncle',
-    },
-    {
-      key: 5,
-      parent: 1,
-      name: 'Manmeet',
-      gender: 'M',
-      birthYear: '2000',
-      relationship: 'son',
-    },
-  ];
 
   public diagramDivClassName = 'myDiagramDiv';
   public diagramModelData = { prop: 'value', color: 'red' };
@@ -82,10 +34,6 @@ export class AppComponent {
   @ViewChild('myDiag', { static: false }) myDiag!: DiagramComponent;
 
   constructor(private appService: AppService) {}
-
-  ngOnInit() {
-    this.treeData = this.familyData;
-  }
 
   initDiagram(): go.Diagram {
     const $ = go.GraphObject.make;
@@ -192,7 +140,7 @@ export class AppComponent {
       })
     );
 
-    dia.model = new go.TreeModel(this.familyData);
+    dia.model = new go.TreeModel(this.treeData);
 
     this.dia = dia;
 
@@ -200,12 +148,15 @@ export class AppComponent {
   }
 
   generateFamilyTree() {
+    this.isLoading = true;
     this.appService
       .searchPrompt(this.textInput)
       .then((response: any) => {
+        this.isLoading = false;
         this.treeData = JSON.parse(response.answer);
       })
       .catch((err: any) => {
+        this.isLoading = false;
         console.error(err);
       });
   }

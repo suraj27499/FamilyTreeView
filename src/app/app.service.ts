@@ -5,7 +5,7 @@ import { OpenAI } from 'openai';
   providedIn: 'root',
 })
 export class AppService {
-  readonly apiKey = '';
+  readonly apiKey = ''; // <---- open ai token/key ---->
 
   searchPrompt(
     textInput: string
